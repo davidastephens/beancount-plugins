@@ -1,11 +1,9 @@
-beancount-plugins
-=================
+# beancount-plugins
 
-Various user contributed plugins for Beancount_,
+Various user contributed plugins for [Beancount] (http://furius.ca/beancount/),
 a double-entry bookkeeping computer language.
 
-Installation
-------------
+## Installation
 
 Install via pip
 
@@ -13,20 +11,18 @@ Install via pip
 
    $ pip install beancount-plugins
 ```
-.. _Beancount:  http://furius.ca/beancount/
 
-=======
-Plugins
-=======
+## Plugins
 
-Automatic Depreciation
-======================
+
+### Automatic Depreciation
 
 This plugin looks at postings that have the 'depreciation' metadata, and
 generates new entries until the closing of the previous year to depreciate the
 value of the account on which the metadata was placed.
 
 Currently, the following methods of depreciation are supported:
+
     WDV: Written Down Value
     CRA: Canadian Revenue Agency method (assets purchased in current year are allowed 50% of normal rate)
 
@@ -51,21 +47,23 @@ plugin "beancount-plugins.plugins.flexible_depreciation.depreciate" "{
 ```
 
 The "depreciation" metadata has this format:
+
+```
   "NARRATION STRING @RATE"
+```
+
 The narration string here will be used in the newly generated entries.
 Rate should be a number, not percentage. Use "0.60" to mean "60%".
 
 
-Zero Sum
-========
+### Zero Sum
 
 Plugin for accounts that should sum up to zero. Determines transactions
 that when taken together, sum up to zero, and move them to a specified
 account. The remaining entries are the 'unmatched' ones, that need attention
 from the user.
 
-Motivation:
------------
+#### Motivation:
 
 Real-world transfers frequently occur between accounts. For example, between a
 checking account and an investment account. When double entry bookkeeping is
@@ -112,8 +110,7 @@ Doing so has a few advantages:
     non-zero value. Errors can therefore be found easily.
 
 
-What this plugin does:
-----------------------
+#### What this plugin does:
 
 Account statements from institutions can be directly converted to double-entry
 format, with transfers simply going to a special transfers account (eg:
@@ -198,8 +195,8 @@ entries. It only changes the accounts to which postings are made. The plugin
 also automatically adds "Open" directives for the target accounts to which
 matched transactions are moved.
 
-Invoking the plugin:
---------------------
+#### Invoking the plugin:
+
 First, an example:
 
     plugin "beancount-plugins.plugins.zero_sum.zerosum" "{
@@ -216,8 +213,8 @@ of accounts on which the plugin should operate. The values are
 the plugin should move matched postings, and the date_range is the range over
 which to check for matches for that account.
 
-Split Transactions
-==================
+### Split Transactions
+
 ```
 plugin "beancount-plugins.plugins.split_transactions.split_transactions"
 ```
