@@ -1,0 +1,9 @@
+[submodule "beancount_plugins/plugins/automated_depreciation"]
+	path = beancount_plugins/plugins/automated_depreciation
+	url = git@bitbucket.org:snippets/happyalu/EAMgj/beancount-automated-depreciation-plugin.git
+[submodule "beancount_plugins/plugins/split_transactions"]
+	path = beancount_plugins/plugins/split_transactions
+	url = git@gist.github.com:aebac3f0146680fd9aa5.git
+[submodule "beancount_plugins/plugins/zero_sum"]
+	path = beancount_plugins/plugins/zero_sum
+	url = git@bitbucket.org:redstreet/redstreet.zerosum.git
