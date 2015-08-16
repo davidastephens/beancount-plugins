@@ -35,7 +35,7 @@ Currently, the following methods of depreciation are supported:
 
 Example: -->
 
-plugin "beancount.plugins.depreciate" "{
+plugin "beancount_plugins.plugins.flexible_depreciation.depreciate" "{
     'method': 'WDV',
     'year_closing_month': 12,  # Could be 3 for the fiscal year ending Mar 31.
     'halfdepr': True,  # Assets used less than 180 days will be depreciated at half the allowed rate that year
@@ -44,7 +44,7 @@ plugin "beancount.plugins.depreciate" "{
     'expense_subaccount': True, #If true, will use subaccount for depreciation expense using first word in Narration.
                                 #ie: Expenses:Depreciation:Printer
     'asset_subaccount': True,   #If true, will use asset subaccount for depreciation expense.
-                                #ie: Assets:Fixed:Comp:Depreciation. 
+                                #ie: Assets:Fixed:Comp:Depreciation.
 }"
 
 2014-03-02 * "" | "Printer Purchase"
