@@ -29,7 +29,9 @@ This plugin looks at postings that have the 'depreciation' metadata, and
 generates new entries until the closing of the previous year to depreciate the
 value of the account on which the metadata was placed.
 
-Currently, only the WDV method of depreciation is supported.
+Currently, the following methods of depreciation are supported:
+    WDV: Written Down Value
+    CRA: Canadian Revenue Agency method (assets purchased in current year are allowed 50% of normal rate)
 
 Example: -->
 
@@ -38,6 +40,9 @@ plugin "beancount.plugins.depreciate" "{
     'year_closing_month': 12,  # Could be 3 for the fiscal year ending Mar 31.
     'halfdepr': True,  # Assets used less than 180 days will be depreciated at half the allowed rate that year
     'account': 'Expenses:Depreciation',  # Account to post depreciation entries to.
+    '2010': 0.5, # Business only open for half year in 2010, apply adjust depreciation rate down.
+    'expense_subaccount': True, #If true, will use subaccount for depreciation expense using first word in Narration.  ie: Expenses:Depreciation:Printer
+    'asset_subaccount': True, #If true, will use asset subaccount for depreciation expense. ie: Assets:Fixed:Comp:Depreciation. 
 }"
 
 2014-03-02 * "" | "Printer Purchase"
@@ -79,11 +84,10 @@ def depreciate(entries, options_map, config):
     year_closing_month = config_obj.pop('year_closing_month', 12)
     half_depr = config_obj.pop('half_depr', True)
     depr_account = config_obj.pop('account', "Expenses:Depreciation")
+    expense_subaccount = config_obj.pop('expense_subaccount', False)
+    asset_subaccount = config_obj.pop('asset_subaccount', False)
 
-
-    print(year_closing_month)
-
-    if depr_method not in ['WDV']:
+    if depr_method not in ['WDV','CRA']:
         raise RuntimeError("Specified depreciation method in plugin not implemented")
 
     if not 0 < year_closing_month <= 12:
@@ -97,35 +101,54 @@ def depreciate(entries, options_map, config):
             for p in entry.postings:
                 if 'depreciation' in p.meta:
                     depr_candidates.append((date, p, entry))
-        except AttributeError:
+        except (AttributeError):
             pass
-
     for date, posting, entry in depr_candidates:
         narration, rate = posting.meta['depreciation'].split('@')
         narration = narration.strip()
         rate = Decimal(rate)
 
-        current_val = posting.position.get_units()
-
+        orig_val = posting.position.get_units()
+        current_val = orig_val
         new_dates = get_closing_dates(date, year_closing_month)
 
         for d in new_dates:
-            if half_depr and d - date < datetime.timedelta(180):
-                # Asset used for less than 180 days, use half the rate allowed.
-                rate_used = rate/2
-                narration_suffix = " - Half Depreciation (<180days)"
-            else:
-                rate_used = rate
-                narration_suffix = ""
+            if depr_method == 'WDR':
+                if half_depr and d - date < datetime.timedelta(180):
+                    # Asset used for less than 180 days, use half the rate allowed.
+                    rate_used = rate/2
+                    narration_suffix = " - Half Depreciation (<180days)"
+                else:
+                    rate_used = rate
+                    narration_suffix = ""
 
+            elif depr_method == 'CRA':
+                if half_depr and d < datetime.date(date.year+1, date.month, date.day):
+                   # Asset purchased this year, use half of rate allowed
+                    rate_used = rate/2
+                    narration_suffix = " - Half Depreciation (Same year)"
+                else:
+                    rate_used = rate
+                    narration_suffix = ""
+
+            multiplier = Decimal(config_obj.get(str(d.year),1))
+            rate_used = rate_used*multiplier
             current_depr = amount_mult(current_val, rate_used)
 
-            p1 = data.Posting(account=posting.account,
+            account = posting.account
+            if asset_subaccount:
+                account += ":Depreciation"
+
+            depr_account_used = depr_account
+            if expense_subaccount:
+                depr_account_used = depr_account + ":" + narration.split(" ")[0]
+
+            p1 = data.Posting(account=account,
                               price=None,
                               meta=None,
                               flag=None,
                               position=Position.from_amounts(amount_mult(current_depr, Decimal(-1))))
-            p2 = data.Posting(account=depr_account,
+            p2 = data.Posting(account=depr_account_used,
                               price=None,
                               meta=None,
                               flag=None,
@@ -173,3 +196,4 @@ def get_last_day_of_month(date):
 
     next_month = date.replace(day=28) + datetime.timedelta(days=4)
     return next_month - datetime.timedelta(days=next_month.day)
+
