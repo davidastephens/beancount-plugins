@@ -35,7 +35,7 @@ setup(
     author_email='dstephens99@gmail.com',
     url='https://github.com/davidastephens/beancount-plugins',
     classifiers=[
-        'Development Status :: 5 - Alpha',
+        'Development Status :: 3 - Alpha',
         'Environment :: Console',
         'Intended Audience :: Financial and Insurance Industry',
         'Operating System :: OS Independent',
