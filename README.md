@@ -56,7 +56,7 @@ The narration string here will be used in the newly generated entries.
 Rate should be a number, not percentage. Use "0.60" to mean "60%".
 
 
-### Zero Sum
+## Zero Sum
 
 Plugin for accounts that should sum up to zero. Determines transactions
 that when taken together, sum up to zero, and move them to a specified
