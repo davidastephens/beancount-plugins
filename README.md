@@ -15,7 +15,7 @@ Install via pip
 ## Plugins
 
 
-### Automatic Depreciation
+## Automatic Depreciation
 
 This plugin looks at postings that have the 'depreciation' metadata, and
 generates new entries until the closing of the previous year to depreciate the
@@ -213,7 +213,7 @@ of accounts on which the plugin should operate. The values are
 the plugin should move matched postings, and the date_range is the range over
 which to check for matches for that account.
 
-### Split Transactions
+## Split Transactions
 
 ```
 plugin "beancount-plugins.plugins.split_transactions.split_transactions"
