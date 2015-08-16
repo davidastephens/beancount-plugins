@@ -52,6 +52,7 @@ setup(
               'beancount_plugins.plugins.split_transactions',
               'beancount_plugins.plugins.zero_sum',
               'beancount_plugins.plugins.automated_depreciation',
+              'beancount_plugins.plugins.flexible_depreciation',
               ],
     #test_suite='tests',
     zip_safe=False,
