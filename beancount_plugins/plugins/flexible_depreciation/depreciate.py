@@ -41,8 +41,10 @@ plugin "beancount.plugins.depreciate" "{
     'halfdepr': True,  # Assets used less than 180 days will be depreciated at half the allowed rate that year
     'account': 'Expenses:Depreciation',  # Account to post depreciation entries to.
     '2010': 0.5, # Business only open for half year in 2010, adjust depreciation rate down.
-    'expense_subaccount': True, #If true, will use subaccount for depreciation expense using first word in Narration.  ie: Expenses:Depreciation:Printer
-    'asset_subaccount': True, #If true, will use asset subaccount for depreciation expense. ie: Assets:Fixed:Comp:Depreciation. 
+    'expense_subaccount': True, #If true, will use subaccount for depreciation expense using first word in Narration.
+                                #ie: Expenses:Depreciation:Printer
+    'asset_subaccount': True,   #If true, will use asset subaccount for depreciation expense.
+                                #ie: Assets:Fixed:Comp:Depreciation. 
 }"
 
 2014-03-02 * "" | "Printer Purchase"
