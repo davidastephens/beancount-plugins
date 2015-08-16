@@ -9,10 +9,10 @@ Installation
 
 Install via pip
 
-.. code-block:: shell
+```shell
 
    $ pip install beancount-plugins
-
+```
 .. _Beancount:  http://furius.ca/beancount/
 
 =======
@@ -30,8 +30,8 @@ Currently, the following methods of depreciation are supported:
     WDV: Written Down Value
     CRA: Canadian Revenue Agency method (assets purchased in current year are allowed 50% of normal rate)
 
-Example: -->
-
+Example:
+```
 plugin "beancount-plugins.plugins.flexible_depreciation.depreciate" "{
     'method': 'WDV',
     'year_closing_month': 12,  # Could be 3 for the fiscal year ending Mar 31.
@@ -48,8 +48,7 @@ plugin "beancount-plugins.plugins.flexible_depreciation.depreciate" "{
   Assets:Cash                                   -100.00 INR
   Assets:Fixed:Comp                              100.00 INR
     depreciation: "Printer Depreciation @0.60"
-
-<--
+```
 
 The "depreciation" metadata has this format:
   "NARRATION STRING @RATE"
@@ -84,6 +83,7 @@ used to track such transfers, we end up with two problems:
 Since the money is truly missing from all the physical accounts for the period
 of transfer, they can be accounted for as shown in this example:
 
+```
 2005-01-01 Transfer
   Assets:Bank_of_Ameriplus  -20 USD
   ZeroSumAccount:Transfers
@@ -91,7 +91,7 @@ of transfer, they can be accounted for as shown in this example:
 2005-01-03 Transfer
   Assets:TB_Trading  20 USD
   ZeroSumAccount:Transfers
-
+```
 Doing so has a few advantages:
 
     a) on 2005-01-02, your assets are accurately represented:
@@ -218,7 +218,7 @@ which to check for matches for that account.
 
 Split Transactions
 ==================
-
+```
 plugin "beancount-plugins.plugins.split_transactions.split_transactions"
-
+```
 Documentation to come.
