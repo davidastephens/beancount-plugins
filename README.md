@@ -28,7 +28,7 @@ Currently, the following methods of depreciation are supported:
 
 Example:
 ```
-plugin "beancount-plugins.plugins.flexible_depreciation.depreciate" "{
+plugin "beancount_plugins.plugins.flexible_depreciation.depreciate" "{
     'method': 'WDV',
     'year_closing_month': 12,  # Could be 3 for the fiscal year ending Mar 31.
     'halfdepr': True,  # Assets used less than 180 days will be depreciated at half the allowed rate that year
