@@ -199,7 +199,7 @@ matched transactions are moved.
 
 First, an example:
 
-    plugin "beancount-plugins.plugins.zero_sum.zerosum" "{
+    plugin "beancount_plugins.plugins.zero_sum.zerosum" "{
      'zerosum_accounts' : {
      'Assets:Zero-Sum-Accounts:Bank-Account-Transfers' : ('Assets:ZSA-Matched:Bank-Account-Transfers', 30),
      'Assets:Zero-Sum-Accounts:Credit-Card-Payments'   : ('Assets:ZSA-Matched:Credit-Card-Payments'  ,  6),
@@ -216,6 +216,6 @@ which to check for matches for that account.
 ## Split Transactions
 
 ```
-plugin "beancount-plugins.plugins.split_transactions.split_transactions"
+plugin "beancount_plugins.plugins.split_transactions.split_transactions"
 ```
 Documentation to come.
