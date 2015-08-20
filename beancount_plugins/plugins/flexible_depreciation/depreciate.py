@@ -109,13 +109,14 @@ def depreciate(entries, options_map, config):
         narration, rate = posting.meta['depreciation'].split('@')
         narration = narration.strip()
         rate = Decimal(rate)
+        rate_used = rate
 
         orig_val = posting.position.get_units()
         current_val = orig_val
         new_dates = get_closing_dates(date, year_closing_month)
 
         for d in new_dates:
-            if depr_method == 'WDR':
+            if depr_method == 'WDV':
                 if half_depr and d - date < datetime.timedelta(180):
                     # Asset used for less than 180 days, use half the rate allowed.
                     rate_used = rate/2
