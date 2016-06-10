@@ -67,7 +67,7 @@ __author__ = 'Alok Parlikar <alok@parlikar.com>'
 import datetime
 from decimal import Decimal
 
-from beancount.core.amount import amount_mult, amount_sub
+from beancount.core.amount import mul, sub
 from beancount.core import data
 from beancount.core.position import Position
 
@@ -103,7 +103,7 @@ def depreciate(entries, options_map, config):
             for p in entry.postings:
                 if 'depreciation' in p.meta:
                     depr_candidates.append((date, p, entry))
-        except (AttributeError):
+        except (AttributeError, TypeError):
             pass
     for date, posting, entry in depr_candidates:
         narration, rate = posting.meta['depreciation'].split('@')
@@ -111,7 +111,7 @@ def depreciate(entries, options_map, config):
         rate = Decimal(rate)
         rate_used = rate
 
-        orig_val = posting.position.get_units()
+        orig_val = posting.units
         current_val = orig_val
         new_dates = get_closing_dates(date, year_closing_month)
 
@@ -136,7 +136,7 @@ def depreciate(entries, options_map, config):
 
             multiplier = Decimal(config_obj.get(str(d.year),1))
             rate_used = rate_used*multiplier
-            current_depr = amount_mult(current_val, rate_used)
+            current_depr = mul(current_val, rate_used)
 
             account = posting.account
             if asset_subaccount:
@@ -148,14 +148,16 @@ def depreciate(entries, options_map, config):
 
             p1 = data.Posting(account=account,
                               price=None,
+                              cost=None,
                               meta=None,
                               flag=None,
-                              position=Position.from_amounts(amount_mult(current_depr, Decimal(-1))))
+                              units=mul(current_depr, Decimal(-1)))
             p2 = data.Posting(account=depr_account_used,
                               price=None,
+                              cost=None,
                               meta=None,
                               flag=None,
-                              position=Position.from_amounts(current_depr))
+                              units=current_depr)
 
             e = entry._replace(narration=narration + narration_suffix,
                                date=d,
@@ -165,7 +167,7 @@ def depreciate(entries, options_map, config):
                                postings=[p1, p2])
             entries.append(e)
 
-            current_val = amount_sub(current_val, current_depr)
+            current_val = sub(current_val, current_depr)
 
     return entries, errors
 
